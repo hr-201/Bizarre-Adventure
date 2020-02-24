@@ -1,10 +1,13 @@
 # Bizarre Adventure v_0.1
 import pygame
 
-from time import sleep
 from player import Player
+import game_all_settings as game_set
+
+from random import randrange
 
 pygame.init()
+pygame.joystick.init()
 
 # FPS
 FPS = 60
@@ -24,22 +27,26 @@ player = Player()
 bullets = pygame.sprite.Group()
 all_sprites = pygame.sprite.Group()
 
+# Background position
+x = 0
+y = 0
+
 while True:
-	for e in pygame.event.get():
-		if e.type == pygame.QUIT:
-			exit()
-		if e.type == pygame.KEYDOWN:
-			if e.key == pygame.K_SPACE:
-				player.shoot(all_sprites, bullets)
+	# Checking all events
+	game_set.check_events(player, all_sprites, bullets)
+
+	x -= 10
+	if x == -(6400 - 800):
+		x = 0 
+
+	display.blit(display_bg, (x, 0))
 
 	all_sprites.update()
 
-	display.blit(display_bg, (0, 0))
+	# Draw objects
+	game_set.draw(x, player, all_sprites, display, display_bg)
 
 	player.move()
-	player.draw(display)
-	
-	all_sprites.draw(display)
 
 	clock.tick(FPS)
 	pygame.display.update()
